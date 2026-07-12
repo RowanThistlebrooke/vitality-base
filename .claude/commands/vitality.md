@@ -58,3 +58,13 @@ git push
 
 Vercel auto-deploys on push, so the full dashboard goes live at their `…vercel.app` in a minute. If it's
 not on GitHub yet, tell them that's the setup step first — this just filled the board locally.
+
+**If the push is blocked** by `GH007: your push would publish a private email address`, their commit email
+is a real address and GitHub's keep-my-email-private is on. Fix it REPO-LOCAL (never `--global`, so it
+doesn't clobber their machine's default identity) with their GitHub noreply email, then re-push:
+
+```bash
+git config user.email "ID+username@users.noreply.github.com"   # from GitHub → Settings → Emails
+git commit --amend --no-edit --reset-author
+git push
+```

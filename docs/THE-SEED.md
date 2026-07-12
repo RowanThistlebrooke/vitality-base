@@ -49,7 +49,11 @@ Introduce yourself in three lines, then build my world in this empty folder:
    each goal, and write them into lib/tiles/weights.ts so y is truly mine.
 5) Then get me live — and START WITH GITHUB: make the GitHub account first,
    then sign into Vercel and Supabase WITH GitHub (one login for all three).
-   GitHub (you do all the git; my only job is the browser sign-in), then Vercel
+   GitHub (you do all the git; my only job is the browser sign-in — and set my
+   commit identity REPO-LOCAL only, NEVER `git config --global`: use my GitHub
+   *noreply* email (`ID+username@users.noreply.github.com`, shown at GitHub →
+   Settings → Emails) so my very first push isn't blocked by GitHub's keep-my-
+   email-private protection [error GH007]), then Vercel
    (import my repo, deploy to my own live URL, then Add to Home Screen so it's
    an app on my phone), then Supabase (my memory: run supabase/sync.sql, add
    the two NEXT_PUBLIC keys). Keep a checklist (SETUP.md) ticking; before each
