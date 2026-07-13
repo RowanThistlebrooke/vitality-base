@@ -16,7 +16,14 @@
     app/app/peak/curve.ts          → the math (circadian baseline + substance PK + wearable mult)
   Sealed: no network, no keys. Every tap is live — log a coffee and the solid line
   lifts off the dotted baseline in real time. Plugs into your saved data through the
-  dashboard bridge (window.Vitality); without it, it plays with you on demo data.
+  dashboard bridge (window.Vitality).
+  HARDWIRED TO VITALS: on boot it reads the vitals tile (BRIDGE.read('vitals'))
+  and derives today's recovery with the SAME formula vitals uses (estRecovery),
+  so poor sleep reshapes the curve on the next refresh — no /sweep, no connector.
+  HONEST GATE: the curve + ring only draw once real signal feeds them (a recovery
+  from Vitals, a caffeine log, a planned event, or a feel drag). Until then they
+  show "not enough data to build" — the stack cards and plan console stay live
+  as the way in.
 -->
 <style>
   :root{
@@ -263,7 +270,6 @@
         </span>
         <span class="stackActions">
           <button type="button" class="miniBtn" id="addBtn">+ Add</button>
-          <a class="miniBtn" href="https://www.patreon.com/RowanTBK/membership" target="_blank" rel="noopener">Setup ↗</a>
         </span>
       </div>
       <div class="addRow" id="addRow" hidden></div>
@@ -326,7 +332,7 @@
           <text class="wt" x="10" y="238">THE OUTPUT &#8212; YOUR PEAK WINDOWS &#8212; FEEDS YOUR GOAL (y). SAME STORE YOUR TILES ALREADY WRITE.</text>
         </svg>
         <div style="margin-top:14px;font-family:var(--font-mono);font-size:10px;letter-spacing:0.12em;color:var(--muted)">
-          MEMBERS: TELL THE MENTOR &#8212; <i style="color:var(--fg);font-family:var(--font-serif);font-size:14px;letter-spacing:0">&ldquo;wire the peak graph into my data&rdquo;</i>
+          TELL THE MENTOR &#8212; <i style="color:var(--fg);font-family:var(--font-serif);font-size:14px;letter-spacing:0">&ldquo;log my coffee&rdquo; &middot; &ldquo;add my class schedule&rdquo; &middot; &ldquo;file my recovery&rdquo;</i>
         </div>
       </div>
     </div>
@@ -439,11 +445,29 @@ function glyph(name){
   return `<svg viewBox="0 0 24 24" ${s}><circle cx="12" cy="12" r="8"/></svg>`;
 }
 
-/* ═══ the data — bridge-backed, demo when the bridge is silent ═══ */
-const DEMO={ weightKg:75, whoop:{recovery:78}, logs:[], events:[], taps:[] };
+/* ═══ the data — bridge-backed ═══
+   Empty by default: the baseline circadian curve needs no data at all.
+   Everything else fills as YOUR data lands — the mentor files logs/events/
+   whoop via save_data, feel drags write back through the bridge. */
+const DEMO={ weightKg:75, whoop:{}, logs:[], events:[], taps:[] };
 let D=JSON.parse(JSON.stringify(DEMO));
 let quickKeys=['coffee','espresso','energy_drink','matcha'];
 const BRIDGE=(typeof window!=='undefined'&&window.Vitality&&typeof window.Vitality.load==='function')?window.Vitality:null;
+
+/* The vitals tile's EXACT recovery formula, copied verbatim so this hardwired
+   read and the mentor's /sweep produce an IDENTICAL number — never a flip-flop.
+   whoopRecovery (a device, Episode 2) wins; else the two manual inputs.
+   Change it here → change vitals.html estRecovery + docs/THE-MATH.md too. */
+function recoveryFromVitals(h){
+  if(!h) return null;
+  if(typeof h.whoopRecovery==='number') return Math.max(1,Math.min(99,Math.round(h.whoopRecovery)));
+  const c=x=>Math.max(0,Math.min(1,x)),parts=[],w=[];
+  if(typeof h.feel==='number'){ parts.push(Math.max(0,Math.min(100,h.feel))); w.push(0.6); }
+  if(typeof h.sleepHours==='number'){ parts.push(c(h.sleepHours/8)*100); w.push(0.4); }
+  if(!parts.length) return null;
+  const sw=w.reduce((a,b)=>a+b,0); let s=0; for(let i=0;i<parts.length;i++)s+=parts[i]*w[i];
+  return Math.max(1,Math.min(99,Math.round(s/sw)));
+}
 async function boot(){
   if(BRIDGE){try{
     const s=await BRIDGE.load();
@@ -456,12 +480,29 @@ async function boot(){
       if(Array.isArray(s.quickKeys)&&s.quickKeys.length)quickKeys=s.quickKeys;
     }
   }catch(e){}}
+  // vitals → peak, HARDWIRED: read the vitals tile and derive today's recovery
+  // with the shared formula, so poor sleep reshapes the curve on the very next
+  // refresh — no /sweep, no connector. (The mentor's sweep writes the same
+  // number via the same formula, so the two never disagree.)
+  try{
+    if(BRIDGE&&typeof BRIDGE.read==='function'){
+      const v=await BRIDGE.read('vitals');
+      if(v&&typeof v==='object'&&!Array.isArray(v)){
+        const nd=new Date(),tk=nd.getFullYear()+'-'+String(nd.getMonth()+1).padStart(2,'0')+'-'+String(nd.getDate()).padStart(2,'0');
+        const days=Object.keys(v).filter(k=>/^\d{4}-\d{2}-\d{2}$/.test(k)).sort();
+        const useKey=v[tk]?tk:days[days.length-1];
+        const rec=useKey?recoveryFromVitals(v[useKey]):null;
+        if(typeof rec==='number')D.whoop=Object.assign({},D.whoop,{recovery:rec});
+      }
+    }
+  }catch(e){}
   const d=new Date();
   document.getElementById('heroDate').textContent=d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}).toUpperCase();
   render(); renderStrip(); renderGauge(null); renderStack(); renderReadout(); renderOpenBlock();
   spawnMotes();
 }
-function persist(){ if(BRIDGE&&typeof BRIDGE.save==='function'){try{BRIDGE.save({taps:D.taps,logs:D.logs,events:D.events,quickKeys});}catch(e){}} }
+/* save the WHOLE store — a feel drag must never wipe what the mentor filed */
+function persist(){ if(BRIDGE&&typeof BRIDGE.save==='function'){try{BRIDGE.save({weightKg:D.weightKg,whoop:D.whoop,taps:D.taps,logs:D.logs,events:D.events,quickKeys});}catch(e){}} }
 
 /* ═══ CurveChart.tsx — ported render ═══ */
 const PAD={top:18,right:24,bottom:32,left:24},RANGE=24,HEIGHT=320;
@@ -473,6 +514,12 @@ const nowHour=Math.min(24,nowDate.getHours()+nowDate.getMinutes()/60);
 function curveDetailed(){return computeCurveDetailed(D.logs,D.whoop,D.weightKg);}
 function scores(){return curveDetailed().map(c=>c.score);}
 function baselineCurve(){const wm=whoopMultiplier(D.whoop);return BASELINE.map((b,h)=>Math.max(0,Math.min(100,b*(wm?wm[h]:1))));}
+
+/* enough to build? The curve + ring only draw once real signal feeds them — a
+   recovery from Vitals, caffeine logs, events, or a feel drag. With nothing
+   personal they'd just be a generic baseline, so we honestly show nothing.
+   The stack cards + plan console stay live below as the way in. */
+function hasSignal(){ return (D.whoop&&typeof D.whoop.recovery==='number') || (D.logs&&D.logs.length>0) || (D.events&&D.events.length>0) || (D.taps&&D.taps.length>0); }
 
 const TIER_COLOR_HEX={Peak:'#6EE7B7',Solid:'#6EE7B7',Tired:'#F59E0B',Low:'#d97706',Drained:'#EF4444'};
 function fmtTick(h){if(h===0||h===24)return'12A';if(h===12)return'12P';return h<12?h+'A':(h-12)+'P';}
@@ -498,6 +545,7 @@ function smoothPath(vals){
 }
 
 function render(){
+  if(!hasSignal()){ wrap.innerHTML='<div style="height:'+HEIGHT+'px;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);opacity:.55">not enough data to build · log a coffee or plan your day below</div>'; return; }
   width=Math.max(320,Math.round(wrap.clientWidth||stage.clientWidth||960));
   const det=curveDetailed(),sc=det.map(c=>c.score),base=baselineCurve();
   const windows=findPeakWindows(sc,Math.floor(nowHour));
@@ -638,6 +686,7 @@ function renderFeel(){
 /* ── HoverGauge ── */
 function renderGauge(hh){
   const el=document.getElementById('gauge');
+  if(!hasSignal()){ if(el)el.innerHTML=''; return; }
   const live=hh!=null,h=live?hh:nowHour;
   const score=scoreAtHour(scores(),h),tier=tierFor(score),color=scoreColorFor(score);
   const size=104,stroke=8,glowPad=12,r=size/2-stroke/2-glowPad,c=2*Math.PI*r;
@@ -750,7 +799,7 @@ const ADD_LIBRARY=['green_tea','pre_workout','cold_brew'];
 function renderAddRow(){
   const row=document.getElementById('addRow');
   const avail=ADD_LIBRARY.filter(k=>!quickKeys.includes(k));
-  if(avail.length===0){row.innerHTML=`<span style="font-size:12.5px;color:var(--muted)">Members can pin any substance from the full library.</span>`;return;}
+  if(avail.length===0){row.innerHTML=`<span style="font-size:12.5px;color:var(--muted)">Ask the mentor to pin any substance from the full library.</span>`;return;}
   row.innerHTML=avail.map(k=>{const s=SUBSTANCES[k];return `<button class="addPill" data-pin="${k}"><span class="chip ${s.tint==='amber'?'amber':''}" style="width:24px;height:24px;border-radius:7px">${glyph(s.glyph)}</span>${s.name}<span style="color:var(--muted);font-family:var(--font-mono);font-size:0.6rem">${s.defaultDose}${s.unit}</span></button>`;}).join('');
 }
 document.getElementById('addBtn').addEventListener('click',()=>{
