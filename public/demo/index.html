@@ -242,6 +242,8 @@ pre .cc{color:rgba(255,255,255,0.32);font-style:italic}
 .ars-item.open .ars-open{max-height:1500px}
 .ars-actions{display:flex;gap:8px}
 .ars-actions .copy-btn{margin-top:12px;padding:10px}
+.pay-what{margin:10px auto 0;max-width:380px;text-align:center;font-size:11.5px;line-height:1.65;color:rgba(255,255,255,.45)}
+.pay-what b{color:#6EE7B7;font-weight:600}
 
 /* the history pill, exactly as it sits under a lift */
 .hx-pill{display:inline-flex;align-items:center;gap:9px;border:1px solid rgba(110,231,183,.35);border-radius:999px;padding:10px 20px;background:transparent;color:var(--mint-cool);font-family:var(--serif);font-style:italic;font-size:1.08rem;cursor:pointer;transition:background .25s,transform .3s var(--spring)}
@@ -759,7 +761,7 @@ tell me the videos show this vision in motion (first one is linked at the top
 of README.md) and that I can watch whenever I want — you&#x27;ll be here either way.
 Then ask me one last thing: do I want you to open the Lab — the site where I
 can see everything I can add to this board? If yes, open it in my browser.</pre>
-    <button type="button" id="seedcopy" class="seed-btn">Copy the seed</button><button type="button" id="allcmdscopy" style="margin-top:10px;padding:11px 24px;border-radius:999px;border:1px solid rgba(110,231,183,.45);background:transparent;color:#6EE7B7;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit" onclick="var t=this;navigator.clipboard.writeText(window.__ALLCMDS).then(function(){t.textContent=String.fromCharCode(67,111,112,105,101,100)+' \u2713 all free commands';setTimeout(function(){t.textContent='Copy all commands'},1900)})">Copy all commands</button><script>window.__ALLCMDS="Set up all my Vitality commands. In this project's .claude/commands/ make sure I have every one:\n\n/vitality \u2014 reinstall the full dashboard (the way back after /detonate)\n/tile <slot> \u2014 build or rebuild any input tile (train, fuel, vitals, brand, peak, finance)\n/detonate \u2014 reset the board to a blank canvas\n/sweep \u2014 file my data (inbox to the right tiles) on your rounds\n/update \u2014 safely pull the newest version any time, my data untouched\n\nIf any are missing, run:\nnpx --yes degit RowanThistlebrooke/vitality-base/.claude/commands .claude/commands --force\n\nThen confirm each command is available and tell me in one line what each does.";</script>
+    <button type="button" id="seedcopy" class="seed-btn">Copy the seed</button><button type="button" id="allcmdscopy" style="margin-top:10px;padding:11px 24px;border-radius:999px;border:1px solid rgba(110,231,183,.45);background:transparent;color:#6EE7B7;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit" onclick="var t=this;navigator.clipboard.writeText(window.__ALLCMDS).then(function(){t.textContent=String.fromCharCode(67,111,112,105,101,100)+' \u2713 all free commands';setTimeout(function(){t.textContent='Copy all commands'},1900)})">Copy all commands</button><button type="button" id="allarsenal" style="margin-top:10px;margin-left:8px;padding:11px 24px;border-radius:999px;border:1px solid rgba(110,231,183,.65);background:rgba(110,231,183,.10);color:#6EE7B7;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit">Add the whole arsenal</button><script>window.__ALLCMDS="Set up all my Vitality commands. In this project's .claude/commands/ make sure I have every one:\n\n/vitality \u2014 reinstall the full dashboard (the way back after /detonate)\n/tile <slot> \u2014 build or rebuild any input tile (train, fuel, vitals, brand, peak, finance)\n/detonate \u2014 reset the board to a blank canvas\n/sweep \u2014 file my data (inbox to the right tiles) on your rounds\n/update \u2014 safely pull the newest version any time, my data untouched\n\nIf any are missing, run:\nnpx --yes degit RowanThistlebrooke/vitality-base/.claude/commands .claude/commands --force\n\nThen confirm each command is available and tell me in one line what each does.";</script>
     <p class="seed-foot">Free &middot; yours forever &middot; your mentor takes it from there</p>
   </section>
 
@@ -1124,6 +1126,7 @@ alter table workout_log add column if not exists rest_sec int not null default 1
       <div class="ars-actions" style="justify-content:center">
         <a href="https://www.patreon.com/RowanTBK/membership" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:9px;background:#fff;color:#111;border-radius:999px;padding:9px 16px;font-weight:700;font-size:12.5px;text-decoration:none"><svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true"><circle cx="14.5" cy="9.5" r="6.5" fill="#FF424D"/><rect x="2" y="3" width="4" height="18" rx="1" fill="#111"/></svg> Support our launch!</a>
       </div>
+      <p class="pay-what">This buys the <b>whole growing Lab</b> — every new add-on lands here as it ships — plus a <b>direct line to us</b>: ask questions, we answer.</p>
     </div>
 <div class="ars-item">
       <div class="ars-hd"><span class="nm">Exercise library</span><span class="c">/addlibrary</span><span class="ep">EP 1</span><span style="margin-left:8px"><svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><circle cx="14.5" cy="9.5" r="6.5" fill="#FF424D"/><rect x="2" y="3" width="4" height="18" rx="1" fill="#fff"/></svg></span></div>
@@ -1151,6 +1154,7 @@ alter table workout_log add column if not exists rest_sec int not null default 1
       <div class="ars-actions" style="justify-content:center">
         <a href="https://www.patreon.com/RowanTBK/membership" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:9px;background:#fff;color:#111;border-radius:999px;padding:9px 16px;font-weight:700;font-size:12.5px;text-decoration:none"><svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true"><circle cx="14.5" cy="9.5" r="6.5" fill="#FF424D"/><rect x="2" y="3" width="4" height="18" rx="1" fill="#111"/></svg> Support our launch!</a>
       </div>
+      <p class="pay-what">This buys the <b>whole growing Lab</b> — every new add-on lands here as it ships — plus a <b>direct line to us</b>: ask questions, we answer.</p>
     </div>
 <div class="ars-item">
       <div class="ars-hd"><span class="nm">Pairs-well suggester</span><span class="c">/addsuggest</span><span class="ep">EP 2</span><span style="margin-left:8px"><svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><circle cx="14.5" cy="9.5" r="6.5" fill="#FF424D"/><rect x="2" y="3" width="4" height="18" rx="1" fill="#fff"/></svg></span></div>
@@ -1164,6 +1168,7 @@ alter table workout_log add column if not exists rest_sec int not null default 1
       <div class="ars-actions" style="justify-content:center">
         <a href="https://www.patreon.com/RowanTBK/membership" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:9px;background:#fff;color:#111;border-radius:999px;padding:9px 16px;font-weight:700;font-size:12.5px;text-decoration:none"><svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true"><circle cx="14.5" cy="9.5" r="6.5" fill="#FF424D"/><rect x="2" y="3" width="4" height="18" rx="1" fill="#111"/></svg> Support our launch!</a>
       </div>
+      <p class="pay-what">This buys the <b>whole growing Lab</b> — every new add-on lands here as it ships — plus a <b>direct line to us</b>: ask questions, we answer.</p>
     </div>
 <div class="ars-item">
       <div class="ars-hd"><span class="nm">Due radar</span><span class="c">/addradar</span><span class="ep">EP 3</span><span style="margin-left:8px"><svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><circle cx="14.5" cy="9.5" r="6.5" fill="#FF424D"/><rect x="2" y="3" width="4" height="18" rx="1" fill="#fff"/></svg></span></div>
@@ -1179,6 +1184,7 @@ alter table workout_log add column if not exists rest_sec int not null default 1
       <div class="ars-actions" style="justify-content:center">
         <a href="https://www.patreon.com/RowanTBK/membership" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:9px;background:#fff;color:#111;border-radius:999px;padding:9px 16px;font-weight:700;font-size:12.5px;text-decoration:none"><svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true"><circle cx="14.5" cy="9.5" r="6.5" fill="#FF424D"/><rect x="2" y="3" width="4" height="18" rx="1" fill="#111"/></svg> Support our launch!</a>
       </div>
+      <p class="pay-what">This buys the <b>whole growing Lab</b> — every new add-on lands here as it ships — plus a <b>direct line to us</b>: ask questions, we answer.</p>
     </div>
 <div class="ars-item">
       <div class="ars-hd"><span class="nm">Attention strip</span><span class="c">/addalerts</span><span class="ep">EP 3</span><span style="margin-left:8px"><svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><circle cx="14.5" cy="9.5" r="6.5" fill="#FF424D"/><rect x="2" y="3" width="4" height="18" rx="1" fill="#fff"/></svg></span></div>
@@ -1190,6 +1196,7 @@ alter table workout_log add column if not exists rest_sec int not null default 1
       <div class="ars-actions" style="justify-content:center">
         <a href="https://www.patreon.com/RowanTBK/membership" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:9px;background:#fff;color:#111;border-radius:999px;padding:9px 16px;font-weight:700;font-size:12.5px;text-decoration:none"><svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true"><circle cx="14.5" cy="9.5" r="6.5" fill="#FF424D"/><rect x="2" y="3" width="4" height="18" rx="1" fill="#111"/></svg> Support our launch!</a>
       </div>
+      <p class="pay-what">This buys the <b>whole growing Lab</b> — every new add-on lands here as it ships — plus a <b>direct line to us</b>: ask questions, we answer.</p>
     </div>
 <div class="ars-item">
       <div class="ars-hd"><span class="nm">Paste importer</span><span class="c">/addpaste</span><span class="ep">EP 3</span></div>
@@ -1245,6 +1252,7 @@ YouTube Premium 13.99 monthly</div>
       <div class="ars-actions" style="justify-content:center">
         <a href="https://www.patreon.com/RowanTBK/membership" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:9px;background:#fff;color:#111;border-radius:999px;padding:9px 16px;font-weight:700;font-size:12.5px;text-decoration:none"><svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true"><circle cx="14.5" cy="9.5" r="6.5" fill="#FF424D"/><rect x="2" y="3" width="4" height="18" rx="1" fill="#111"/></svg> Support our launch!</a>
       </div>
+      <p class="pay-what">This buys the <b>whole growing Lab</b> — every new add-on lands here as it ships — plus a <b>direct line to us</b>: ask questions, we answer.</p>
 
     <!-- SCREENSHOT IMPORT: premium, browser-side OCR, VITALITY EXCLUSIVE -->
     <div class="ars-item legendary">
@@ -1292,6 +1300,7 @@ YouTube Premium 13.99 monthly</div>
         </div>
         <div style="flex:0 0 auto;display:flex;flex-direction:column;gap:10px;align-items:flex-end">
           <a href="https://www.patreon.com/RowanTBK/membership" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:9px;background:#fff;color:#111;border-radius:999px;padding:9px 16px;font-weight:700;font-size:12.5px;text-decoration:none"><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><circle cx="14.5" cy="9.5" r="6.5" fill="#FF424D"/><rect x="2" y="3" width="4" height="18" rx="1" fill="#111"/></svg> Plug it into your data</a>
+          <p class="pay-what" style="margin:0;text-align:right;max-width:300px">This buys the <b>whole growing Lab</b> — every new add-on lands here as it ships — plus a <b>direct line to us</b>: ask questions, we answer.</p>
         </div>
       </div>
       <iframe id="peakFrame" src="./tiles/peak.html" scrolling="no" style="width:100%;height:1640px;border:0;display:block;background:#050505" title="The Peak Page — live"></iframe>
@@ -1492,6 +1501,26 @@ YouTube Premium 13.99 monthly</div>
     });
   });
 
+  // "Add the whole arsenal" — ONE paste that writes every free /add* command.
+  // Assembled from the page itself (same fileFor the cards + zip use), so it
+  // can never drift from what the cards show. No URL, no zip, works offline.
+  (function(){
+    var b=document.getElementById('allarsenal'); if(!b) return;
+    b.addEventListener('click', function(){
+      var seen={}, parts=[];
+      [].slice.call(document.querySelectorAll('[data-file]')).forEach(function(x){
+        var id=x.dataset.file; if(seen[id])return; seen[id]=true;
+        parts.push('===== FILE: .claude/commands/'+id+'.md =====\n'+fileFor(id));
+      });
+      var txt='Set up my WHOLE Vitality arsenal. Write each file below into .claude/commands/ exactly as given (create the folder if it is missing, overwrite what exists). Do not paraphrase or trim the file bodies.\n\n'
+        +parts.join('\n\n')
+        +'\n\nWhen every file is written, confirm each /command is available with a one-line description. Paid episode add-ons ship separately from the Lab.';
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='Copied ✓ every add-on command';
+        setTimeout(function(){b.textContent='Add the whole arsenal';},1900);
+      });
+    });
+  })();
   async function downloadArsenal(zipBtn){
     // the zip is built FROM the page: every brick card ships automatically, and
     // the REAL tested code + full backend are fetched from this very site at
@@ -1505,15 +1534,15 @@ YouTube Premium 13.99 monthly</div>
     });
     // the exact living logger (the playable one on this page) rides along as the code bundle
     try {
-      var r = await fetch('/lab/logger.html');
+      var r = await fetch('/demo/lab/logger.html');
       if (r.ok) files.push({ name: 'code/the-living-logger.html', text: await r.text() });
     } catch(e){}
     try {
-      var rs = await fetch('/lab/stack.html');
+      var rs = await fetch('/demo/lab/stack.html');
       if (rs.ok) files.push({ name: 'code/the-living-stack.html', text: await rs.text() });
     } catch(e){}
     try {
-      var rf = await fetch('/lab/subs.html');
+      var rf = await fetch('/demo/lab/subs.html');
       if (rf.ok) files.push({ name: 'code/the-radar.html', text: await rf.text() });
     } catch(e){}
     // the full tested backend, fetched fresh
@@ -1633,6 +1662,8 @@ YouTube Premium 13.99 monthly</div>
       if (t) t.addEventListener('click', function(){
         var lane = scope.querySelector('.video-lane'); lane.hidden = !lane.hidden;
       });
+      var z = scope.querySelector('.zip-alt');
+      if (z) z.addEventListener('click', function(ev){ ev.preventDefault(); downloadArsenal(z); });
     }
     var typeTimer = null;
     function typeCmd(){
